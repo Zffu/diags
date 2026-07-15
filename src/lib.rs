@@ -1,11 +1,14 @@
 //! The diags library is a library for diagnostics (errors, warnings, informations) and more!
 
+use std::process::exit;
+
 use crate::span::LabelledSpan;
 
 pub mod fmt;
 pub mod pos;
 pub mod span;
 
+#[derive(PartialEq)]
 pub enum Level {
     CriticalError,
     Error,
@@ -45,6 +48,14 @@ impl Diagnostic {
             spans: vec![],
             notes: vec![],
             helps: vec![],
+        }
+    }
+
+    pub fn emit(&self) {
+        println!("{}", self);
+
+        if self.code.level == Level::CriticalError {
+            exit(0); // Exists if the error is too much
         }
     }
 
