@@ -7,7 +7,7 @@ use crate::{fmt::parse_fmt_str, utils::get_attr_val};
 mod fmt;
 mod utils;
 
-#[proc_macro_derive(IntoDiagnostic, attributes(message, primary_span, note, span, help))]
+#[proc_macro_derive(Diagnostic, attributes(message, primary_span, note, span, help))]
 pub fn derive(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
 
@@ -41,17 +41,34 @@ pub fn derive(input: TokenStream) -> TokenStream {
     for field in fields {
         let ident = field.ident.unwrap();
 
+        let mut note = None;
+
         for attr in field.attrs {
+            if attr.path().is_ident("note") {
+                note = Some(parse_fmt_str(get_attr_val(&attr)));
+            }
+
+            let span = if note.is_none() {
+                quote! { self.#ident }
+            } else {
+                let note = note.clone().unwrap();
+                quote! { self.#ident.label(#note) }
+            };
+
             if attr.path().is_ident("primary_span") {
                 builder.push(quote! {
-                    .primary_span(self.#ident)
-                })
+                    .primary_span(#span)
+                });
+
+                note = None;
             }
 
             if attr.path().is_ident("span") {
                 builder.push(quote! {
-                    .span(self.#ident)
-                })
+                    .span(#span)
+                });
+
+                note = None;
             }
         }
     }
