@@ -98,13 +98,3 @@ impl Diagnostic {
         k
     }
 }
-
-pub trait IntoDiagnostic {
-    fn into_diag(self) -> Diagnostic;
-}
-
-impl Into<()> for Diagnostic {
-    fn into(self) -> () {
-        ()
-    }
-}
