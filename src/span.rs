@@ -40,4 +40,22 @@ impl Span {
             end_col: end.col,
         }
     }
+
+    pub fn new_start_only(kind: SpanKind, file: PathBuf, position: PositionDelimiter) -> Self {
+        Self {
+            kind,
+            file,
+            start_line: position.line,
+            start_col: position.col,
+            end_line: position.line,
+            end_col: position.col,
+        }
+    }
+
+    pub fn label(self, name: Option<String>) -> LabelledSpan {
+        LabelledSpan {
+            span: self,
+            label: name,
+        }
+    }
 }
