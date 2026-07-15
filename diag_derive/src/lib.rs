@@ -1,6 +1,6 @@
 use proc_macro::TokenStream;
-use quote::{ToTokens, format_ident, quote};
-use syn::{Data, DeriveInput, Expr, Ident, Lit, Meta, parse, parse_macro_input};
+use quote::{format_ident, quote};
+use syn::{Data, DeriveInput, Expr, Lit, Meta, parse_macro_input};
 
 use crate::{fmt::parse_fmt_str, utils::get_attr_val};
 
