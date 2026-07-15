@@ -39,7 +39,7 @@ pub(crate) fn parse_fmt_str(str: String) -> TokenStream {
         let ident = format_ident!("{}", placeholder);
 
         generated.push(quote! {
-            #ident = self.#ident
+            #ident = self.#ident,
         })
     }
 
