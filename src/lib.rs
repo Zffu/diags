@@ -13,6 +13,7 @@ pub type DiagnosticResult<K> = Result<K, ()>;
 pub type MaybeDiag = DiagnosticResult<()>;
 
 #[derive(PartialEq)]
+#[cfg_attr(feature = "debug", derive(Debug))]
 pub enum Level {
     CriticalError,
     Error,
@@ -20,11 +21,13 @@ pub enum Level {
     Info,
 }
 
+#[cfg_attr(feature = "debug", derive(Debug))]
 pub struct DiagnosticCode {
     pub level: Level,
     pub code: usize,
 }
 
+#[cfg_attr(feature = "debug", derive(Debug))]
 pub struct Diagnostic {
     pub code: DiagnosticCode,
 

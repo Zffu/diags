@@ -11,6 +11,7 @@ pub enum SpanKind {
 }
 
 #[derive(Clone)]
+#[cfg_attr(feature = "debug", derive(Debug))]
 pub struct Span {
     pub file: PathBuf,
 
