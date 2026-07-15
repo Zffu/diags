@@ -2,14 +2,16 @@ use std::path::PathBuf;
 
 use crate::pos::PositionDelimiter;
 
+pub struct MainSpan(pub LabelledSpan);
+pub struct SecondarySpan(pub LabelledSpan);
+
 pub enum SpanKind {
     Primary,
     Seconday,
 }
 
+#[derive(Clone)]
 pub struct Span {
-    pub kind: SpanKind,
-
     pub file: PathBuf,
 
     pub start_line: usize,
@@ -19,20 +21,15 @@ pub struct Span {
     pub end_col: usize,
 }
 
+#[derive(Clone)]
 pub struct LabelledSpan {
     pub span: Span,
     pub label: Option<String>,
 }
 
 impl Span {
-    pub fn new(
-        kind: SpanKind,
-        file: PathBuf,
-        start: PositionDelimiter,
-        end: PositionDelimiter,
-    ) -> Self {
+    pub fn new(file: PathBuf, start: PositionDelimiter, end: PositionDelimiter) -> Self {
         Self {
-            kind,
             file,
             start_line: start.line,
             start_col: start.col,
@@ -41,9 +38,8 @@ impl Span {
         }
     }
 
-    pub fn new_start_only(kind: SpanKind, file: PathBuf, position: PositionDelimiter) -> Self {
+    pub fn new_start_only(file: PathBuf, position: PositionDelimiter) -> Self {
         Self {
-            kind,
             file,
             start_line: position.line,
             start_col: position.col,

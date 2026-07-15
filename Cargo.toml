@@ -5,3 +5,4 @@ edition = "2024"
 
 [dependencies]
 diag_derive = { path = "./diag_derive"}
+colored = "3.1.1"

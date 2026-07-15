@@ -2,6 +2,7 @@
 
 use crate::span::LabelledSpan;
 
+pub mod fmt;
 pub mod pos;
 pub mod span;
 
