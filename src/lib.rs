@@ -29,6 +29,12 @@ pub struct Diagnostic {
     pub helps: Vec<String>,
 }
 
+impl DiagnosticCode {
+    pub fn new(level: Level, code: usize) -> Self {
+        Self { level, code }
+    }
+}
+
 impl Diagnostic {
     pub fn new(code: DiagnosticCode, message: String) -> Self {
         Self {
@@ -68,4 +74,8 @@ impl Diagnostic {
 
         k
     }
+}
+
+pub trait IntoDiagnostic {
+    fn into(self) -> Diagnostic;
 }

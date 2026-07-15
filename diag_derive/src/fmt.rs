@@ -1,4 +1,4 @@
-use proc_macro::TokenStream;
+use proc_macro2::TokenStream;
 use quote::{format_ident, quote};
 
 pub(crate) fn parse_fmt_str(str: String) -> TokenStream {
@@ -46,5 +46,4 @@ pub(crate) fn parse_fmt_str(str: String) -> TokenStream {
     quote! {
         format!(#str, #(#generated)*)
     }
-    .into()
 }
