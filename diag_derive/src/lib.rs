@@ -1,18 +1,24 @@
 use proc_macro::TokenStream;
-use quote::quote;
-use syn::{Data, DeriveInput, parse_macro_input};
+use quote::{ToTokens, format_ident, quote};
+use syn::{Data, DeriveInput, Expr, Ident, Lit, Meta, parse, parse_macro_input};
 
 use crate::{fmt::parse_fmt_str, utils::get_attr_val};
 
 mod fmt;
 mod utils;
 
-#[proc_macro_derive(Diagnostic, attributes(message, primary_span, note, span, help))]
+#[proc_macro_derive(
+    Diagnostic,
+    attributes(message, primary_span, note, span, help, level, code)
+)]
 pub fn derive(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
 
     let name = input.ident;
     let mut message_str = quote! {}.into();
+
+    let mut level = quote! {};
+    let mut code = quote! {};
 
     let mut notes = vec![];
     let mut help = vec![];
@@ -30,6 +36,36 @@ pub fn derive(input: TokenStream) -> TokenStream {
 
         if attribute.path().is_ident("message") {
             message_str = parse_fmt_str(get_attr_val(&attribute));
+        }
+
+        if attribute.path().is_ident("level") {
+            match &attribute.meta {
+                Meta::NameValue(nv) => {
+                    if let Expr::Lit(expr) = &nv.value {
+                        if let Lit::Str(s) = &expr.lit {
+                            let v = format_ident!("{}", s.value());
+                            level = quote! { #v }
+                        }
+                    }
+                }
+
+                _ => {}
+            }
+        }
+
+        if attribute.path().is_ident("code") {
+            match &attribute.meta {
+                Meta::NameValue(nv) => {
+                    if let Expr::Lit(expr) = &nv.value {
+                        if let Lit::Int(s) = &expr.lit {
+                            code = quote! { #s };
+                            continue;
+                        }
+                    }
+                }
+
+                _ => {}
+            }
         }
     }
 
@@ -88,7 +124,7 @@ pub fn derive(input: TokenStream) -> TokenStream {
     quote! {
         impl IntoDiagnostic for #name {
             fn into(self) -> Diagnostic {
-                Diagnostic::new(diags::DiagnosticCode::new(diags::Level::Error, 0), #message_str)#(#builder)*
+                Diagnostic::new(DiagnosticCode::new(Level::#level, #code), #message_str)#(#builder)*
             }
         }
     }

@@ -28,7 +28,7 @@ pub(crate) fn parse_fmt_str(str: String) -> TokenStream {
 
     if placeholders.is_empty() {
         return quote! {
-            #str
+            #str.to_string()
         }
         .into();
     }
