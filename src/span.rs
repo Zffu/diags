@@ -10,7 +10,7 @@ pub enum SpanKind {
     Seconday,
 }
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 #[cfg_attr(feature = "debug", derive(Debug))]
 pub struct Span {
     pub file: PathBuf,
