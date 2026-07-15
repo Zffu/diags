@@ -122,9 +122,9 @@ pub fn derive(input: TokenStream) -> TokenStream {
     }
 
     quote! {
-        impl IntoDiagnostic for #name {
-            fn into(self) -> Diagnostic {
-                Diagnostic::new(DiagnosticCode::new(Level::#level, #code), #message_str)#(#builder)*
+        impl diags::IntoDiagnostic for #name {
+            fn into(self) -> diags::Diagnostic {
+                diags::Diagnostic::new(diags::DiagnosticCode::new(diags::Level::#level, #code), #message_str)#(#builder)*
             }
         }
     }
