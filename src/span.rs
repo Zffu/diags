@@ -23,6 +23,7 @@ pub struct Span {
 }
 
 #[derive(Clone)]
+#[cfg_attr(feature = "debug", derive(Debug))]
 pub struct LabelledSpan {
     pub span: Span,
     pub label: Option<String>,
