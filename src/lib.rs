@@ -96,5 +96,5 @@ impl Diagnostic {
 }
 
 pub trait IntoDiagnostic {
-    fn into(self) -> Diagnostic;
+    fn into_diag(self) -> Diagnostic;
 }
