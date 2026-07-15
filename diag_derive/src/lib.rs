@@ -85,10 +85,10 @@ pub fn derive(input: TokenStream) -> TokenStream {
             }
 
             let span = if note.is_none() {
-                quote! { self.#ident }
+                quote! { self.#ident.label(None) }
             } else {
                 let note = note.clone().unwrap();
-                quote! { self.#ident.label(#note) }
+                quote! { self.#ident.label(Some(#note)) }
             };
 
             if attr.path().is_ident("primary_span") {
