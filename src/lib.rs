@@ -5,8 +5,12 @@ use std::process::exit;
 use crate::span::LabelledSpan;
 
 pub mod fmt;
+pub mod macros;
 pub mod pos;
 pub mod span;
+
+pub type DiagnosticResult<K> = Result<K, ()>;
+pub type MaybeDiag = DiagnosticResult<()>;
 
 #[derive(PartialEq)]
 pub enum Level {
@@ -97,4 +101,10 @@ impl Diagnostic {
 
 pub trait IntoDiagnostic {
     fn into_diag(self) -> Diagnostic;
+}
+
+impl Into<()> for Diagnostic {
+    fn into(self) -> () {
+        ()
+    }
 }
