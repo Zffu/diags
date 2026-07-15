@@ -41,14 +41,21 @@ impl DiagnosticCode {
 
 impl Diagnostic {
     pub fn new(code: DiagnosticCode, message: String) -> Self {
-        Self {
+        let diag = Self {
             code,
             message,
             primary_span: None,
             spans: vec![],
             notes: vec![],
             helps: vec![],
+        };
+
+        #[cfg(feature = "emit_on_creation")]
+        {
+            diag.emit();
         }
+
+        diag
     }
 
     pub fn emit(&self) {
